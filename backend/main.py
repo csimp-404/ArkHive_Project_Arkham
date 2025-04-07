@@ -40,7 +40,7 @@ async def get_users_by_id(userId:int, db:Session=Depends(get_db)):
     return results
 
 #Create New User
-@app.post("/drinks/")
+@app.post("/users/")
 async def create_user(user: UsersModel, db:Session=Depends(get_db)):
     orm_drink = Users(**user.model_dump())
     db.add(orm_drink)
