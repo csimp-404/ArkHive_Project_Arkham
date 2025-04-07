@@ -65,6 +65,12 @@ async def get_messages(title: str | None=None, db:Session=Depends(get_db)):
         results = db.query(Messages).filter(Messages.title == title).first()
         return results
     
+#Get message by reciever (THis is good for showing only messages meant for the currently active account)
+@app.get("/messages/received/{user_id}")
+async def get_received_messages(user_id: int, db: Session = Depends(get_db)):
+    messages = db.query(Messages).filter(Messages.userIdReciever == user_id).all()
+    return messages
+
 #Get Message by messageId
 @app.get("/messages/{messageId}")
 async def get_messages_by_id(messageId: int | None=None, db:Session=Depends(get_db)):
