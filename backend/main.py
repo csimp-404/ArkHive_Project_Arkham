@@ -40,7 +40,7 @@ async def get_users_by_id(userId:int, db:Session=Depends(get_db)):
     return results
 
 #Create New User
-@app.post("/drinks/")
+@app.post("/users/")
 async def create_user(user: UsersModel, db:Session=Depends(get_db)):
     orm_drink = Users(**user.model_dump())
     db.add(orm_drink)
@@ -65,6 +65,18 @@ async def get_messages(title: str | None=None, db:Session=Depends(get_db)):
         results = db.query(Messages).filter(Messages.title == title).first()
         return results
     
+#Get message by reciever (THis is good for showing only messages meant for the currently active account)
+@app.get("/messages/received/{user_id}")
+async def get_received_messages(user_id: int, db: Session = Depends(get_db)):
+    messages = db.query(Messages).filter(Messages.userIdReciever == user_id).all()
+    return messages
+
+#Get message by sender (To get the list of messages you sent)
+@app.get("/messages/sent/{user_id}")
+async def get_sent_messages(user_id: int, db: Session= Depends(get_db)):
+    messages = db.query(Messages).filter(Messages.userIdSender == user_id).all()
+    return messages
+
 #Get Message by messageId
 @app.get("/messages/{messageId}")
 async def get_messages_by_id(messageId: int | None=None, db:Session=Depends(get_db)):
