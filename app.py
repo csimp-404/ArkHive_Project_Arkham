@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import os
@@ -6,7 +7,7 @@ import os
 #region App Setup
 app = Flask(__name__)
 app.config['DEBUG'] = True
-
+bcrypt = Bcrypt(app)
 app.secret_key = os.urandom(20)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./backend/Arkham.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
