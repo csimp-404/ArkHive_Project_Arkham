@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Messages</title>
+</head>
+<body>
+    <h1>My Messages</h1>
+    
+    <div id="messages-container">
+        <!-- messages go here -->
+    </div>
+
+    <script>
+        const currentUserId = 1;
+
+        fetch(`http://localhost:8000/messages/received/${currentUserId}`)
+            .then(response => response.json())
+            .then(messages => {
+                const container = document.getElementById('messages-container');
+
+                if (messages.length === 0) {
+                    container.innerHTML = "<p>No messages found.</p>";
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.innerHTML = `
+                        <p><strong>From:</strong> User #${msg.userIdSender}</p>
+                        <p><strong>Message:</strong> ${msg.content}</p>
+                        <p><strong>Date:</strong> ${msg.messageDate}</p>
+                        <hr>
+                    `;
+                    container.appendChild(messageDiv);
+                });
+            })
+            .catch(error => {
+                console.error("Failed to fetch messages:", error);
+            });
+    </script>
+</body>
+</html>
