@@ -17,6 +17,6 @@ class Messages(Base):
     messageId      = Column(Integer, primary_key=True, autoincrement=True)
     content        = Column(String)
     userIdSender   = Column(Integer)
-    userIdReciever = Column(Integer)
+    userIdReceiver = Column(Integer)
     isRead         = Column(Boolean)
     messageDate    = Column(String)
