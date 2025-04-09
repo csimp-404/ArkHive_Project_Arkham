@@ -22,8 +22,8 @@ def login(username):
 @app.route('/home')
 def home():
 
-@app.route('/register')
-def register():
+# @app.route('/register')
+# def register():
 
 @app.route('message')
 def messages():
