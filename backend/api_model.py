@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from typing import Optional
+
 
 class UsersModel(BaseModel):
     userId: int
@@ -6,7 +8,7 @@ class UsersModel(BaseModel):
     password: str
 
 class MessagesModel(BaseModel):
-    messageId: int
+    messageId: Optional[int] = None
     content: str
     userIdSender: int
     userIdReceiver: int

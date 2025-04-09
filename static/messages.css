@@ -1,0 +1,81 @@
+/* messages.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0f0f0f;
+    margin: 0;
+    padding: 20px;
+    color: #f1f5f9;
+}
+
+h1, h2 {
+    color: hotpink;
+}
+
+#messages-container {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(255, 20, 147, 0.2);
+}
+
+#messages-container div {
+    margin-bottom: 20px;
+    border-left: 4px solid lime;
+    padding-left: 15px;
+    background-color: #111;
+    border-radius: 6px;
+}
+
+form {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(57, 255, 20, 0.2);
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    color: hotpink;
+}
+
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid hotpink;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: vertical;
+    background-color: #222;
+    color: #fff;
+}
+
+button {
+    margin-top: 15px;
+    background-color: lime;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: hotpink;
+    color: white;
+    transform: scale(1.05);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #444;
+    margin: 20px 0;
+}

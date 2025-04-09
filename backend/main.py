@@ -11,6 +11,14 @@ import api_model
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or ["http://localhost:5000"] if you want to be specific
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 engine = create_engine("sqlite:///./Arkham_DB.db")
 Base.metadata.create_all(engine)
 
@@ -68,7 +76,7 @@ async def get_messages(title: str | None=None, db:Session=Depends(get_db)):
 #Get message by reciever (THis is good for showing only messages meant for the currently active account)
 @app.get("/messages/received/{user_id}")
 async def get_received_messages(user_id: int, db: Session = Depends(get_db)):
-    messages = db.query(Messages).filter(Messages.userIdReciever == user_id).all()
+    messages = db.query(Messages).filter(Messages.userIdReceiver == user_id).all()
     return messages
 
 #Get message by sender (To get the list of messages you sent)
