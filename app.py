@@ -15,18 +15,21 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 FASTAPI_URL = "http://127.0.0.1:8000"
 
 @app.route('/')
-def login(username):
+def login():
     response = requests.get(f"{FASTAPI_URL}/users")
-    user = response.json()
-    return
+    users = response.json()
+    return render_template('login.html', users=users)
+
 @app.route('/home')
 def home():
+    return render_template('home.html')
 
 # @app.route('/register')
 # def register():
 
-@app.route('message')
+@app.route('/message')
 def messages():
+    return render_template('messages.html')
 
 if __name__ == "__main__":
- app.run(debug=True)
+    app.run(debug=True)
