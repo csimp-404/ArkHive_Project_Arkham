@@ -7,7 +7,7 @@ Base = declarative_base()
 class Users(Base):
     __tablename__ = "Users"
 
-    drinkId  = Column(Integer, primary_key=True, autoincrement=True)
+    userId  = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String)
     password = Column(String)
 

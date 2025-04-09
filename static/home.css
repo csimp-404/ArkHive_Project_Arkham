@@ -1,6 +1,10 @@
 :root {
     --neonGreen: #39ff14;
     --hotPink: #ff69b4;
+    --darkGrey: #393939;
+    --lightGrey: #ccc;
+    --bgDark: #1a1a1a;
+    --bgLight: #605f5f;
 }
 
 * {
@@ -11,8 +15,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #39ff14;
+    background-color: var(--bgDark);
+    color: var(--neonGreen);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -22,17 +26,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #1a1a1a;
+    background-color: var(--bgDark);
     padding: 1rem;
     position: relative;
 }
 
 .header h1 {
     font-size: 2rem;
+    color: var(--neonGreen);
 }
 
 .icon {
-    background-color: #ccc;
+    background-color: var(--lightGrey);
     padding: 0.5rem;
     border-radius: 5px;
     cursor: pointer;
@@ -62,28 +67,44 @@ body {
 }
 
 .sidebar {
-    background-color: #393939;
+    background-color: var(--darkGrey);
     padding: 1rem;
-    width: 20%;
-    min-width: 150px;
+    width: 25%;
+    min-width: 200px;
+    max-width: 300px;
+    color: #ccc;
+    border-right: 2px solid var(--neonGreen);
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar h2 {
-    border-bottom: 2px solid #ff69b4;
+    border-bottom: 2px solid var(--hotPink);
     margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--neonGreen);
 }
 
 .recent-item {
-    background-color: #ccc;
-    height: 40px;
+    background-color: var(--lightGrey);
+    padding: 0.5rem;
     margin-bottom: 1rem;
+    border-radius: 5px;
+    color: #333;
+    cursor: pointer;
+}
+
+.recent-item:hover {
+    background-color: var(--neonGreen);
+    color: white;
 }
 
 .main {
-    background-color: #605f5f;
+    background-color: var(--bgLight);
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
+    color: white;
 }
 
 .main h2 {
@@ -101,8 +122,19 @@ body {
 .user-card {
     width: 60px;
     height: 60px;
-    background-color: #ccc;
+    background-color: var(--lightGrey);
     border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.user-card:hover {
+    background-color: var(--neonGreen);
+    color: white;
 }
 
 .popup.inbox {
@@ -110,7 +142,6 @@ body {
     position: absolute;
     top: 60px;
     right: -10px;
-    /* Shifted to prevent going off screen */
     background-color: #111;
     border: 2px solid var(--neonGreen);
     padding: 1rem;
@@ -125,6 +156,7 @@ body {
 
 .popup.inbox h3 {
     color: var(--neonGreen);
+    font-size: 1.2rem;
 }
 
 .popup.inbox ul {
@@ -139,9 +171,6 @@ body {
     font-size: 0.9rem;
     color: #ccc;
 }
-
-
-/* Profile popup */
 
 .popup.profile {
     display: none;
@@ -164,7 +193,7 @@ body {
 .popup.profile .profile-pic {
     width: 60px;
     height: 60px;
-    background-color: #ccc;
+    background-color: var(--lightGrey);
     border-radius: 50%;
     margin: 0 auto 0.5rem auto;
 }
@@ -172,10 +201,11 @@ body {
 .popup.profile .username {
     color: var(--hotPink);
     font-weight: bold;
+    font-size: 1.1rem;
 }
 
 
-/* Responsive design */
+/* Responsive Design */
 
 @media (max-width: 768px) {
     .container {
@@ -183,6 +213,7 @@ body {
     }
     .sidebar {
         width: 100%;
+        min-width: 100%;
     }
     .main {
         width: 100%;
@@ -191,4 +222,19 @@ body {
 
 footer {
     display: none;
+}
+
+.logout-btn {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.logout-btn:hover {
+    background-color: #ff1a1a;
 }
