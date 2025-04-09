@@ -31,8 +31,15 @@ def get_db():
 
 #region User Endpoints
 
-#Get User by Username/All
+#Get All Users
 @app.get("/users/")
+async def get_users(db:Session=Depends(get_db)):
+
+    results = db.query(Users).all()
+    return results
+    
+#Get User by Username
+@app.get("/users/{username}")
 async def get_users(username: str | None=None, db:Session=Depends(get_db)):
     if not username:
         results = db.query(Users).all()
