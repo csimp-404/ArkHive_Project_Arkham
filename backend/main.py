@@ -1,3 +1,4 @@
+#region Imports
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,8 +8,11 @@ from sqlalchemy.orm import Session
 from db_model import Base, Users, Messages
 from api_model import UsersModel, MessagesModel, BaseModel
 
+import bcrypt
 import api_model
+#endregion
 
+#region FastAPI APP Setup
 app = FastAPI()
 
 app.add_middleware(
@@ -18,7 +22,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+#endregion
 
+#region DB Connection
 engine = create_engine("sqlite:///./Arkham_DB.db")
 Base.metadata.create_all(engine)
 
@@ -28,11 +34,37 @@ def get_db():
         yield db
     finally:
         db.close()
+#endregion
 
+#region Bcrypt Setup
+passSalt = bcrypt.gensalt()
+def passencrypt (username: str, password: str):
+    s = 1
+def passcompare (username: str, password: str):
+    isUser = get_users(username=username)
+
+    if isUser == username:
+        isUser
+        bcrypt.checkpw
+
+#endregion
+
+#region Login Endpoints
+@app.post("/login")
+async def login(username: str, password: str):
+    notrightnow = test
+#endregion
 #region User Endpoints
 
-#Get User by Username/All
+#Get All Users
 @app.get("/users/")
+async def get_users(db:Session=Depends(get_db)):
+
+    results = db.query(Users).all()
+    return results
+    
+#Get User by Username
+@app.get("/users/{username}")
 async def get_users(username: str | None=None, db:Session=Depends(get_db)):
     if not username:
         results = db.query(Users).all()
@@ -47,11 +79,12 @@ async def get_users_by_id(userId:int, db:Session=Depends(get_db)):
     results = db.query(Users).filter(Users.userId == userId).first()
     return results
 
+
 #Create New User
 @app.post("/users/")
 async def create_user(user: UsersModel, db:Session=Depends(get_db)):
-    orm_drink = Users(**user.model_dump())
-    db.add(orm_drink)
+    orm_user = Users(**user.model_dump())
+    db.add(orm_user)
     db.commit()
 
 #Edit User

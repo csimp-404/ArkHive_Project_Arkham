@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What's Up App - Home</title>
+    <link rel="stylesheet" href="static\home.css" />
+</head>
+
+<body>
+    <div class="header">
+        <div class="profile-icon icon" onclick="toggleProfile()">
+            👤
+            <div class="popup profile" id="profilePopup">
+                <div class="profile-pic"></div>
+                <p class="username">{{ username }}</p>
+            </div>
+        </div>
+        <h1>What's Up App</h1>
+        <div class="mail-icon icon" onclick="toggleInbox()">
+            📬
+            <span class="badge">{{ received_messages|length }}</span>
+            <div class="popup inbox" id="inbox">
+                <h3>Inbox</h3>
+                {% if received_messages %}
+                <ul>
+                    {% for msg in received_messages %}
+                    <li>
+                        <a href="/message/{{ msg.userIdSender }}">
+                                    {{ msg.content }}
+                                </a> (from ID {{ msg.userIdSender }})
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No messages found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2>Recent Messages</h2>
+            <div class="recent-item">
+                {% if recent_messages %}
+                <ul>
+                    {% for msg in recent_messages %}
+                    <li>
+                        <a href="/message/{{ msg.userIdReceiver if session.user_id == msg.userIdSender else msg.userIdSender }}">
+                                    {{ msg.content }}
+                                </a> {% if session.user_id == msg.userIdSender %} (to ID {{ msg.userIdReceiver }}) {% else %} (from ID {{ msg.userIdSender }}) {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No recent interactions found.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="main">
+            <h2>Online Users</h2>
+            <hr>
+            <br>
+            <ul class="user-list">
+                {% if users %} {% for user in users %} {% if user.userId != session.user_id %}
+                <li class="user-box">
+                    <div class="profile-circle"></div>
+                    <a href="/message{{ user.UserId }}">
+                        <span class="username">{{ user.username }}</span>
+                        <span class="user-id">ID: {{ user.userId }}</span>
+                    </a>
+                </li>
+                {% endif %} {% endfor %} {% else %}
+                <li class="no-users">No users found.</li>
+                {% endif %}
+            </ul>
+            <!-- Logout Button -->
+            <a href="/login" class="logout-btn">Logout</a>
+            <!-- Messages button in cause of failure-->
+            <!-- <a href="/message" class="messages-btn">Messages</a> -->
+        </div>
+    </div>
+
+    <script>
+        function toggleInbox() {
+            document.getElementById("inbox").classList.toggle("show");
+        }
+
+        function toggleProfile() {
+            document.getElementById("profilePopup").classList.toggle("show");
+        }
+
+        //Close popups when clicking elsewhere on the page
+        document.addEventListener("click", function(e) {
+            const inbox = document.getElementById("inbox");
+            const inboxIcon = document.querySelector(".mail-icon");
+            const profile = document.getElementById("profilePopup");
+            const profileIcon = document.querySelector(".profile-icon");
+            if (!inboxIcon.contains(e.target)) {
+                inbox.classList.remove("show");
+            }
+            if (!profileIcon.contains(e.target)) {
+                profile.classList.remove("show");
+            }
+        });
+    </script>
+</body>
+
+</html>

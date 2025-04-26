@@ -1,0 +1,313 @@
+:root {
+    --neonGreen: #39ff14;
+    --hotPink: #ff69b4;
+    --darkGrey: #393939;
+    --lightGrey: #ccc;
+    --bgDark: #1a1a1a;
+    --bgLight: #605f5f;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bgDark);
+    color: var(--neonGreen);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+hr {
+    color: #ff69b4;
+    background-color: #ff69b4;
+    height: 2px;
+    border: none;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bgDark);
+    padding: 1rem;
+    position: relative;
+}
+
+.header h1 {
+    font-size: 2rem;
+    color: var(--neonGreen);
+}
+
+.icon {
+    background-color: var(--lightGrey);
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 0.5rem;
+}
+
+.mail-icon,
+.profile-icon {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: var(--hotPink);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.sidebar {
+    background-color: var(--darkGrey);
+    padding: 1rem;
+    width: 25%;
+    min-width: 200px;
+    max-width: 300px;
+    color: #ccc;
+    border-right: 2px solid var(--neonGreen);
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    border-bottom: 2px solid var(--hotPink);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--neonGreen);
+}
+
+.recent-item {
+    background-color: var(--lightGrey);
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    color: #333;
+    cursor: pointer;
+}
+
+.recent-item:hover {
+    background-color: var(--neonGreen);
+    color: white;
+}
+
+.main {
+    background-color: var(--bgLight);
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    color: white;
+}
+
+.main h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.user-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.user-card {
+    width: 60px;
+    height: 60px;
+    background-color: var(--lightGrey);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.user-card:hover {
+    background-color: var(--neonGreen);
+    color: white;
+}
+
+.popup.inbox {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: -10px;
+    background-color: #111;
+    border: 2px solid var(--neonGreen);
+    padding: 1rem;
+    width: 250px;
+    z-index: 10;
+    border-radius: 10px;
+}
+
+.popup.inbox.show {
+    display: block;
+}
+
+.popup.inbox h3 {
+    color: var(--neonGreen);
+    font-size: 1.2rem;
+}
+
+.popup.inbox ul {
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.popup.inbox li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.popup.profile {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background-color: #111;
+    border: 2px solid var(--hotPink);
+    padding: 1rem;
+    width: 200px;
+    z-index: 10;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.popup.profile.show {
+    display: block;
+}
+
+.popup.profile .profile-pic {
+    width: 60px;
+    height: 60px;
+    background-color: var(--lightGrey);
+    border-radius: 50%;
+    margin: 0 auto 0.5rem auto;
+}
+
+.popup.profile .username {
+    color: var(--hotPink);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        min-width: 100%;
+    }
+    .main {
+        width: 100%;
+    }
+}
+
+footer {
+    display: none;
+}
+
+.logout-btn {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.logout-btn:hover {
+    background-color: #ff1a1a;
+}
+
+.messages-btn {
+    position: fixed;
+    bottom: 10px;
+    left: 310px;
+    padding: 10px 20px;
+    background-color: #4d5cff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.messages-btn:hover {
+    background-color: #4d5cff;
+}
+
+.user-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 0;
+}
+
+.user-box {
+    background-color: #2b2b2b;
+    /* Light pink for a cute touch */
+    border-radius: 10px;
+    padding: 15px;
+    width: 150px;
+    text-align: center;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.profile-circle {
+    width: 50px;
+    height: 50px;
+    background-color: lightGrey;
+    /* A soft pink */
+    border-radius: 50%;
+    margin: 0 auto 10px;
+}
+
+.username {
+    font-weight: bold;
+    color: #39ff14;
+    /* A deeper #555 */
+}
+
+.user-id {
+    display: block;
+    font-size: 12px;
+    color: #39ff14;
+}
+
+.no-users {
+    font-style: italic;
+    color: #888;
+}
