@@ -27,7 +27,7 @@
                 <ul>
                     {% for msg in received_messages %}
                     <li>
-                        <a href="/messages/{{ msg.userIdSender }}">
+                        <a href="/message/{{ msg.userIdSender }}">
                                     {{ msg.content }}
                                 </a> (from ID {{ msg.userIdSender }})
                     </li>
@@ -48,7 +48,7 @@
                 <ul>
                     {% for msg in recent_messages %}
                     <li>
-                        <a href="/messages/{{ msg.userIdReceiver if session.user_id == msg.userIdSender else msg.userIdSender }}">
+                        <a href="/message/{{ msg.userIdReceiver if session.user_id == msg.userIdSender else msg.userIdSender }}">
                                     {{ msg.content }}
                                 </a> {% if session.user_id == msg.userIdSender %} (to ID {{ msg.userIdReceiver }}) {% else %} (from ID {{ msg.userIdSender }}) {% endif %}
                     </li>
@@ -62,21 +62,25 @@
 
         <div class="main">
             <h2>Online Users</h2>
-            <ul>
-                {% if users %} {% for user in users %} {% if user.drinkId != session.user_id %}
-                <li>
-                    <a href="/messages/{{ user.drinkId }}">
-                                    {{ user.username }} (ID: {{ user.drinkId }})
-                                </a>
+            <hr>
+            <br>
+            <ul class="user-list">
+                {% if users %} {% for user in users %} {% if user.userId != session.user_id %}
+                <li class="user-box">
+                    <div class="profile-circle"></div>
+                    <a href="/message{{ user.UserId }}">
+                        <span class="username">{{ user.username }}</span>
+                        <span class="user-id">ID: {{ user.userId }}</span>
+                    </a>
                 </li>
                 {% endif %} {% endfor %} {% else %}
-                <li>No users found.</li>
+                <li class="no-users">No users found.</li>
                 {% endif %}
             </ul>
             <!-- Logout Button -->
-            <a href="/login.html" class="logout-btn">Logout</a>
+            <a href="/login" class="logout-btn">Logout</a>
             <!-- Messages button in cause of failure-->
-            <a href="/messages.html" class="messages-btn">Messages</a>
+            <!-- <a href="/message" class="messages-btn">Messages</a> -->
         </div>
     </div>
 
