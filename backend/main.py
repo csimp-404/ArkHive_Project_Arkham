@@ -51,8 +51,16 @@ def passcompare (username: str, password: str):
 
 #region Login Endpoints
 @app.post("/login")
-async def login(username: str, password: str):
-    notrightnow = test
+def login_user(username: str, password: str, db:Session=Depends(get_db)):
+
+    user = db.query(Users).filter(Users.username == username).first()
+    if not user:
+        return {"success": False, "message": "Invalid username or password"}
+
+    if bcrypt.checkpw(password.encode(), user.hashed_password.encode()):
+        return {"success": True, "message": "Login successful", "user_id": user.id}
+    return {"success": False, "message": "Invalid username or password"}
+
 #endregion
 #region User Endpoints
 

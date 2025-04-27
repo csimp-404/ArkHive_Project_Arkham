@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 import requests
@@ -20,24 +20,21 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        # Call the API to retrieve the user by username
         try:
-            response = requests.get(f"{FASTAPI_URL}/users/{username}")
-            user = response.json() if response.status_code == 200 else None
+            response = requests.post(f"{FASTAPI_URL}/login", json={
+                "username": username,
+                "password": password
+            })
+            result = response.json()
         except requests.exceptions.RequestException as e:
-            return f"Error connecting to the user API: {str(e)}"
-        
-        if user:
-            # Compare the provided password with the stored hashed password
-            if bcrypt.check_password_hash(password.encode('utf-8'), user['password'].encode('utf-8')):
-                return redirect(url_for('home'))
-            else:
-                error_message = 'Invalid password, please try again.'
-                return error_message
+            return render_template("login.html", error="API connection error.")
+
+        if result.get("success"):
+            session['username'] = username
+            return redirect(url_for('/home'))
         else:
-            error_message = 'User not found, please try again.'
-            return error_message
-        
+            return render_template("login.html", error=result.get("message", "Login failed."))
+
     return render_template('login.html')
 
 @app.route('/home')
