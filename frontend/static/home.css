@@ -1,10 +1,10 @@
 :root {
-    --neonGreen: #39ff14;
-    --hotPink: #ff69b4;
-    --darkGrey: #393939;
+    --gcpdBlue: #5da9e9;
+    --gcpdDarkBlue: #0a0f1a;
+    --gcpdSteel: #1c2431;
+    --gcpdAccent: #2b8dc0;
     --lightGrey: #ccc;
-    --bgDark: #1a1a1a;
-    --bgLight: #605f5f;
+    --white: #f0f0f0;
 }
 
 * {
@@ -15,16 +15,15 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: var(--bgDark);
-    color: var(--neonGreen);
+    background-color: var(--gcpdDarkBlue);
+    color: var(--white);
     height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 hr {
-    color: #ff69b4;
-    background-color: #ff69b4;
+    background-color: var(--gcpdBlue);
     height: 2px;
     border: none;
 }
@@ -33,14 +32,14 @@ hr {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--bgDark);
+    background-color: var(--gcpdSteel);
     padding: 1rem;
     position: relative;
 }
 
 .header h1 {
     font-size: 2rem;
-    color: var(--neonGreen);
+    color: var(--gcpdBlue);
 }
 
 .icon {
@@ -60,7 +59,7 @@ hr {
     position: absolute;
     top: -8px;
     right: -10px;
-    background: var(--hotPink);
+    background: var(--gcpdAccent);
     color: white;
     font-size: 0.7rem;
     padding: 2px 6px;
@@ -74,22 +73,21 @@ hr {
 }
 
 .sidebar {
-    background-color: var(--darkGrey);
+    background-color: var(--gcpdSteel);
     padding: 1rem;
     width: 25%;
     min-width: 200px;
     max-width: 300px;
-    color: #ccc;
-    border-right: 2px solid var(--neonGreen);
+    border-right: 2px solid var(--gcpdBlue);
     height: 100vh;
     overflow-y: auto;
 }
 
 .sidebar h2 {
-    border-bottom: 2px solid var(--hotPink);
+    border-bottom: 2px solid var(--gcpdBlue);
     margin-bottom: 1rem;
     font-size: 1.5rem;
-    color: var(--neonGreen);
+    color: var(--gcpdBlue);
 }
 
 .recent-item {
@@ -102,21 +100,21 @@ hr {
 }
 
 .recent-item:hover {
-    background-color: var(--neonGreen);
+    background-color: var(--gcpdBlue);
     color: white;
 }
 
 .main {
-    background-color: var(--bgLight);
+    background-color: var(--gcpdDarkBlue);
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
-    color: white;
 }
 
 .main h2 {
     text-align: center;
     margin-bottom: 1rem;
+    color: var(--gcpdBlue);
 }
 
 .user-list {
@@ -129,18 +127,18 @@ hr {
 .user-card {
     width: 60px;
     height: 60px;
-    background-color: var(--lightGrey);
+    background-color: var(--gcpdSteel);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: black;
+    color: white;
     font-weight: bold;
     cursor: pointer;
 }
 
 .user-card:hover {
-    background-color: var(--neonGreen);
+    background-color: var(--gcpdAccent);
     color: white;
 }
 
@@ -149,8 +147,8 @@ hr {
     position: absolute;
     top: 60px;
     right: -10px;
-    background-color: #111;
-    border: 2px solid var(--neonGreen);
+    background-color: var(--gcpdDarkBlue);
+    border: 2px solid var(--gcpdBlue);
     padding: 1rem;
     width: 250px;
     z-index: 10;
@@ -162,7 +160,7 @@ hr {
 }
 
 .popup.inbox h3 {
-    color: var(--neonGreen);
+    color: var(--gcpdBlue);
     font-size: 1.2rem;
 }
 
@@ -176,7 +174,7 @@ hr {
 .popup.inbox li {
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
-    color: #ccc;
+    color: var(--white);
 }
 
 .popup.profile {
@@ -184,8 +182,8 @@ hr {
     position: absolute;
     top: 60px;
     left: 0;
-    background-color: #111;
-    border: 2px solid var(--hotPink);
+    background-color: var(--gcpdDarkBlue);
+    border: 2px solid var(--gcpdAccent);
     padding: 1rem;
     width: 200px;
     z-index: 10;
@@ -206,14 +204,12 @@ hr {
 }
 
 .popup.profile .username {
-    color: var(--hotPink);
+    color: var(--gcpdAccent);
     font-weight: bold;
     font-size: 1.1rem;
 }
 
-
 /* Responsive Design */
-
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -236,7 +232,7 @@ footer {
     bottom: 10px;
     right: 10px;
     padding: 10px 20px;
-    background-color: #ff4d4d;
+    background-color: #e84545;
     color: white;
     border: none;
     cursor: pointer;
@@ -246,7 +242,7 @@ footer {
 }
 
 .logout-btn:hover {
-    background-color: #ff1a1a;
+    background-color: #d7263d;
 }
 
 .messages-btn {
@@ -254,7 +250,7 @@ footer {
     bottom: 10px;
     left: 310px;
     padding: 10px 20px;
-    background-color: #4d5cff;
+    background-color: var(--gcpdBlue);
     color: white;
     border: none;
     cursor: pointer;
@@ -264,47 +260,76 @@ footer {
 }
 
 .messages-btn:hover {
-    background-color: #4d5cff;
-}
-
-.user-list {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    padding: 0;
+    background-color: var(--gcpdAccent);
 }
 
 .user-box {
-    background-color: #2b2b2b;
-    /* Light pink for a cute touch */
+    background-color: var(--gcpdSteel);
     border-radius: 10px;
     padding: 15px;
     width: 150px;
     text-align: center;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    gap: 10px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     position: relative;
 }
 
 .profile-circle {
     width: 50px;
     height: 50px;
-    background-color: lightGrey;
-    /* A soft pink */
     border-radius: 50%;
-    margin: 0 auto 10px;
+    overflow: hidden;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
 }
+
+.profile-circle:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+.profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Make sure the image fills without stretching weird */
+}
+
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 50%; /* Make it a perfect circle */
+    background-color: #ccc; /* fallback background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-pic img.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* important: don't stretch image */
+}
+
 
 .username {
     font-weight: bold;
-    color: #39ff14;
-    /* A deeper #555 */
+    color: var(--gcpdBlue);
 }
 
 .user-id {
     display: block;
     font-size: 12px;
-    color: #39ff14;
+    color: var(--gcpdBlue);
 }
 
 .no-users {

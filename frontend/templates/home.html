@@ -5,19 +5,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>What's Up App - Home</title>
-    <link rel="stylesheet" href="static\home.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}" />
 </head>
 
 <body>
     <div class="header">
         <div class="profile-icon icon" onclick="toggleProfile()">
-            👤
+            <img src="{{ url_for('static', filename='profile_pics/' + user_profile_pic) }}" alt="Profile Picture" class="profile-pic">
             <div class="popup profile" id="profilePopup">
-                <div class="profile-pic"></div>
                 <p class="username">{{ username }}</p>
             </div>
         </div>
+        
+
         <h1>What's Up App</h1>
+
         <div class="mail-icon icon" onclick="toggleInbox()">
             📬
             <span class="badge">{{ received_messages|length }}</span>
@@ -27,9 +29,9 @@
                 <ul>
                     {% for msg in received_messages %}
                     <li>
-                        <a href="/message/{{ msg.userIdSender }}">
-                                    {{ msg.content }}
-                                </a> (from ID {{ msg.userIdSender }})
+                        <a href="/conversation/{{ msg.userIdSender }}">
+                            {{ msg.content }}
+                        </a> (from ID {{ msg.userIdSender }})
                     </li>
                     {% endfor %}
                 </ul>
@@ -43,14 +45,20 @@
     <div class="container">
         <div class="sidebar">
             <h2>Recent Messages</h2>
+            <hr>
             <div class="recent-item">
                 {% if recent_messages %}
                 <ul>
                     {% for msg in recent_messages %}
                     <li>
-                        <a href="/message/{{ msg.userIdReceiver if session.user_id == msg.userIdSender else msg.userIdSender }}">
-                                    {{ msg.content }}
-                                </a> {% if session.user_id == msg.userIdSender %} (to ID {{ msg.userIdReceiver }}) {% else %} (from ID {{ msg.userIdSender }}) {% endif %}
+                        <a href="/conversation/{{ msg.userIdReceiver if session.user_id == msg.userIdSender else msg.userIdSender }}">
+                            {{ msg.content }}
+                        </a>
+                        {% if session.user_id == msg.userIdSender %}
+                            (to ID {{ msg.userIdReceiver }})
+                        {% else %}
+                            (from ID {{ msg.userIdSender }})
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
@@ -65,22 +73,28 @@
             <hr>
             <br>
             <ul class="user-list">
-                {% if users %} {% for user in users %} {% if user.userId != session.user_id %}
-                <li class="user-box">
-                    <div class="profile-circle"></div>
-                    <a href="/message{{ user.UserId }}">
-                        <span class="username">{{ user.username }}</span>
-                        <span class="user-id">ID: {{ user.userId }}</span>
-                    </a>
-                </li>
-                {% endif %} {% endfor %} {% else %}
+                {% if users %}
+                    {% for user in users %}
+                        {% if user.userId != 1 %}
+                        <li class="user-box">
+                            <div class="profile-circle">
+                                <img src="{{ url_for('static', filename='profile_pics/' + user.profilePic) }}" alt="Profile Picture">
+                            </div>
+                            <a href="/conversation/{{ user.userId }}">
+                                <span class="username">{{ user.username }}</span>
+                                <span class="user-id">ID: {{ user.userId }}</span>
+                            </a>
+                            
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
                 <li class="no-users">No users found.</li>
                 {% endif %}
             </ul>
+
             <!-- Logout Button -->
             <a href="/login" class="logout-btn">Logout</a>
-            <!-- Messages button in cause of failure-->
-            <!-- <a href="/message" class="messages-btn">Messages</a> -->
         </div>
     </div>
 
@@ -93,12 +107,13 @@
             document.getElementById("profilePopup").classList.toggle("show");
         }
 
-        //Close popups when clicking elsewhere on the page
-        document.addEventListener("click", function(e) {
+        // Close popups when clicking elsewhere
+        document.addEventListener("click", function (e) {
             const inbox = document.getElementById("inbox");
             const inboxIcon = document.querySelector(".mail-icon");
             const profile = document.getElementById("profilePopup");
             const profileIcon = document.querySelector(".profile-icon");
+
             if (!inboxIcon.contains(e.target)) {
                 inbox.classList.remove("show");
             }

@@ -22,7 +22,8 @@ def login():
         
         # Call the API to retrieve the user by username
         try:
-            response = requests.get(f"{FASTAPI_URL}/users/{username}")
+            response = requests.get(f"{FASTAPI_URL}/users/username/{username}")
+
             user = response.json() if response.status_code == 200 else None
         except requests.exceptions.RequestException as e:
             return f"Error connecting to the user API: {str(e)}"
@@ -42,29 +43,60 @@ def login():
 
 @app.route('/home')
 def home():
-#    return render_template('home.html')
-    response = requests.get(f"{FASTAPI_URL}/username")
-    username = response.json() if response.status_code == 200 else "Guest"
-    response = requests.get(f"{FASTAPI_URL}/messages/received/{1}")
-    received_messages = response.json() if response.status_code == 200 else []
-    response = requests.get(f"{FASTAPI_URL}/messages/recent/{1}")
-    recent_messages = response.json() if response.status_code == 200 else []
-    response = requests.get(f"{FASTAPI_URL}/users")
-    users = response.json() if response.status_code == 200 else []
+    username = "Guest"  # fallback hardcoded for now
+
+    try:
+        user_response = requests.get(f"{FASTAPI_URL}/users/username/{username}")
+        user_data = user_response.json() if user_response.status_code == 200 else None
+    except requests.exceptions.RequestException as e:
+        return f"Error getting user info: {str(e)}"
+
+    # Safely set the profilePic
+    profile_pic = user_data['profilePic'] if user_data and 'profilePic' in user_data else "default.png"
+
+    response_received = requests.get(f"{FASTAPI_URL}/messages/received/1")
+    received_messages = response_received.json() if response_received.status_code == 200 else []
+
+    response_recent = requests.get(f"{FASTAPI_URL}/messages/recent/1")
+    recent_messages = response_recent.json() if response_recent.status_code == 200 else []
+
+    response_users = requests.get(f"{FASTAPI_URL}/users/")
+    users = response_users.json() if response_users.status_code == 200 else []
+
     return render_template(
         'home.html',
         username=username,
+        user_profile_pic=profile_pic,
         received_messages=received_messages,
         recent_messages=recent_messages,
         users=users
     )
 
+
 # @app.route('/register')
 # def register():
 
-@app.route('/message')
-def messages():
-    return render_template('messages.html')
+#@app.route('/message')
+#def messages():
+#    return render_template('messages.html')
+
+@app.route('/conversation/<int:other_user_id>')
+def conversation(other_user_id):
+    current_user_id = 1  # fake login for now
+
+    # Get the other user's info
+    try:
+        user_response = requests.get(f"{FASTAPI_URL}/users/{other_user_id}")
+        other_user = user_response.json() if user_response.status_code == 200 else None
+    except requests.exceptions.RequestException as e:
+        return f"Error getting user: {str(e)}"
+
+    if other_user is None:
+        return "User not found.", 404
+
+    return render_template('conversation.html', other_user_id=other_user_id, other_user_name=other_user['username'])
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

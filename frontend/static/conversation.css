@@ -1,0 +1,83 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0a0f1a; /* dark blue-black */
+    margin: 0;
+    padding: 20px;
+    color: #dbe9f4; /* very light blue/gray text */
+}
+
+h1 {
+    color: #5da9e9; /* soft blue for titles */
+}
+
+#messages-container {
+    background-color: #1c2431;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(93, 169, 233, 0.3);
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.message {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #15202b; /* normal for your messages */
+    border-left: 4px solid #5da9e9;
+    border-radius: 6px;
+    color: white;
+}
+
+.message.you {
+    margin-left: 100px;
+}
+
+.message.them {
+    background-color: #2c3e50; /* darker background for THEM */
+    border-left: 4px solid #e84545; /* reddish left border for them */
+    color: #f0f0f0;
+}
+
+form {
+    background-color: #1c2431;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(93, 169, 233, 0.3);
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #5da9e9;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: vertical;
+    background-color: #15202b;
+    color: #dbe9f4;
+}
+
+button {
+    margin-top: 15px;
+    background-color: #5da9e9;
+    color: #0a0f1a;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #2b8dc0;
+    color: white;
+    transform: scale(1.05);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #3e5d78;
+    margin: 20px 0;
+}
