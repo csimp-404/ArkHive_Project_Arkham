@@ -1,6 +1,11 @@
 #region Imports
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
+templates = Jinja2Templates(directory="../frontend/templates")
+
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -66,20 +71,23 @@ def login_user(username: str, password: str, db:Session=Depends(get_db)):
 
 #Get All Users
 @app.get("/users/")
-async def get_users(db:Session=Depends(get_db)):
-
+async def get_users(db: Session = Depends(get_db)):
     results = db.query(Users).all()
-    return results
-    
+    users_list = []
+    for user in results:
+        users_list.append({
+            "userId": user.userId,
+            "username": user.username,
+            "password": user.password,
+            "profilePic": user.profilePic
+        })
+    return users_list
+
 #Get User by Username
-@app.get("/users/{username}")
-async def get_users(username: str | None=None, db:Session=Depends(get_db)):
-    if not username:
-        results = db.query(Users).all()
-        return results
-    else:
-        results = db.query(Users).filter(Users.username == username).one()
-        return results
+@app.get("/users/username/{username}")
+async def get_user_by_username(username: str, db: Session = Depends(get_db)):
+    result = db.query(Users).filter(Users.username == username).first()
+    return result
 
 #Get User by userId
 @app.get("/users/{userId}")
@@ -87,11 +95,12 @@ async def get_users_by_id(userId:int, db:Session=Depends(get_db)):
     results = db.query(Users).filter(Users.userId == userId).first()
     return results
 
-
 #Create New User
 @app.post("/users/")
-async def create_user(user: UsersModel, db:Session=Depends(get_db)):
+async def create_user(user: UsersModel, db: Session = Depends(get_db)):
     orm_user = Users(**user.model_dump())
+    if not orm_user.profilePic:
+        orm_user.profilePic = "default.png"  # fallback if not provided
     db.add(orm_user)
     db.commit()
 
@@ -126,6 +135,16 @@ async def get_sent_messages(user_id: int, db: Session= Depends(get_db)):
     messages = db.query(Messages).filter(Messages.userIdSender == user_id).all()
     return messages
 
+
+@app.get("/messages/conversation/{current_user_id}/{other_user_id}")
+async def get_conversation(current_user_id: int, other_user_id: int, db: Session = Depends(get_db)):
+    messages = db.query(Messages).filter(
+        ((Messages.userIdSender == current_user_id) & (Messages.userIdReceiver == other_user_id)) |
+        ((Messages.userIdSender == other_user_id) & (Messages.userIdReceiver == current_user_id))
+    ).order_by(Messages.messageDate.asc()).all()
+    return messages
+
+
 #Get Message by messageId
 @app.get("/messages/{messageId}")
 async def get_messages_by_id(messageId: int | None=None, db:Session=Depends(get_db)):
@@ -141,5 +160,15 @@ async def create_message(message: MessagesModel, db:Session=Depends(get_db)):
 #Edit Message
 
 #Delete Message
+
+#
+@app.get("/conversation/{other_user_id}", response_class=HTMLResponse)
+async def conversation_page(request: Request, other_user_id: int):
+    return templates.TemplateResponse("conversation.html", {
+        "request": request,
+        "other_user_id": other_user_id
+    })
+
+
 
 #endregion

@@ -6,6 +6,7 @@ class UsersModel(BaseModel):
     userId: int
     username: str
     password: str
+    profilePic: str = "default.png"
 
 class MessagesModel(BaseModel):
     messageId: Optional[int] = None

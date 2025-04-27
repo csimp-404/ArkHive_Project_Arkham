@@ -10,6 +10,7 @@ class Users(Base):
     userId  = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String)
     password = Column(String)
+    profilePic = Column(String, default="default.png")
 
 class Messages(Base):
     __tablename__ = "Messages"
