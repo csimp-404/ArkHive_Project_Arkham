@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='conversation.css') }}" />
+</head>
+<body>
+    <h1>Conversation with {{ other_user_name }}</h1>
+
+
+
+    <div id="messages-container"></div>
+
+    <form id="send-message-form">
+        <textarea id="message-content" rows="4" cols="50" required></textarea><br><br>
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        const currentUserId = 1; // Hardcoded for now
+        const otherUserId = Number("{{ other_user_id }}");
+        const otherUserName = "{{ other_user_name }}";
+
+    
+        function loadMessages() {
+            fetch(`http://localhost:8000/messages/conversation/${currentUserId}/${otherUserId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    const container = document.getElementById('messages-container');
+                    container.innerHTML = '';
+    
+                    if (messages.length === 0) {
+                        container.innerHTML = "<p>No messages found.</p>";
+                        return;
+                    }
+    
+                    messages.forEach(msg => {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.classList.add('message');
+
+                    if (msg.userIdSender === currentUserId) {
+                        msgDiv.classList.add('you'); // add .you class for YOUR messages
+                    } else {
+                        msgDiv.classList.add('them'); // "them" stays default
+                    }
+
+                    msgDiv.innerHTML = `
+                        <p><strong>${msg.userIdSender === currentUserId ? 'You' : otherUserName}:</strong> ${msg.content}</p>
+                        <small>${new Date(msg.messageDate).toLocaleString()}</small>
+                    `;
+                    container.appendChild(msgDiv);
+                });
+
+                })
+                .catch(err => console.error('Error loading conversation', err));
+        }
+    
+        // Load when page opens
+        loadMessages();
+    
+        // Auto-refresh every 5 seconds
+        setInterval(loadMessages, 5000);
+    
+        // Sending a new message
+        document.getElementById('send-message-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+    
+            const content = document.getElementById('message-content').value;
+    
+            fetch('http://localhost:8000/messages/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: content,
+                    userIdSender: currentUserId,
+                    userIdReceiver: otherUserId,
+                    isRead: false,
+                    messageDate: new Date().toISOString()
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('send-message-form').reset();
+                    loadMessages();
+                } else {
+                    alert('Failed to send message.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
