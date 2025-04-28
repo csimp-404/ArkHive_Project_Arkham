@@ -55,17 +55,24 @@ def passcompare (username: str, password: str):
 #endregion
 
 #region Login Endpoints
+# Pydantic model for login request
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
 @app.post("/login")
-def login_user(username: str, password: str, db:Session=Depends(get_db)):
+def login_user(login: LoginRequest, db: Session = Depends(get_db)):
+    username = login.username
+    password = login.password
 
     user = db.query(Users).filter(Users.username == username).first()
     if not user:
-        return {"success": False, "message": "Invalid username or password"}
+        raise HTTPException(status_code=401, detail="Invalid username or password")
 
-    if bcrypt.checkpw(password.encode(), user.hashed_password.encode()):
-        return {"success": True, "message": "Login successful", "user_id": user.id}
-    return {"success": False, "message": "Invalid username or password"}
-
+    if bcrypt.checkpw(password.encode(), user.password.encode()):
+        return {"success": True, "message": "Login successful", "user_id": user.userId}
+    
+    raise HTTPException(status_code=401, detail="Invalid username or password")
 #endregion
 #region User Endpoints
 

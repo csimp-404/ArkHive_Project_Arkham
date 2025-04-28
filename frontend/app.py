@@ -31,7 +31,7 @@ def login():
 
         if result.get("success"):
             session['username'] = username
-            return redirect(url_for('/home'))
+            return redirect(url_for('home')) 
         else:
             return render_template("login.html", error=result.get("message", "Login failed."))
 
