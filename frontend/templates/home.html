@@ -75,7 +75,7 @@
             <ul class="user-list">
                 {% if users %}
                     {% for user in users %}
-                        {% if user.userId != 1 %}
+                        {% if user.userId != session['user_id'] %}
                         <li class="user-box">
                             <div class="profile-circle">
                                 <img src="{{ url_for('static', filename='profile_pics/' + user.profilePic) }}" alt="Profile Picture">

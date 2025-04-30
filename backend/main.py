@@ -30,7 +30,7 @@ app.add_middleware(
 #endregion
 
 #region DB Connection
-engine = create_engine("sqlite:///./Arkham_DB.db")
+engine = create_engine("sqlite:///./backend/Arkham_DB.db")
 Base.metadata.create_all(engine)
 
 def get_db():
@@ -65,13 +65,31 @@ def login_user(login: LoginRequest, db: Session = Depends(get_db)):
     username = login.username
     password = login.password
 
+    print("🔐 Incoming login:", username)
+
     user = db.query(Users).filter(Users.username == username).first()
     if not user:
         raise HTTPException(status_code=401, detail="Invalid username or password")
-
-    if bcrypt.checkpw(password.encode(), user.password.encode()):
-        return {"success": True, "message": "Login successful", "user_id": user.userId}
     
+    print("📦 Stored password hash:", user.password)
+    print("🧪 Checking password match...")
+
+    try:
+        match = bcrypt.checkpw(password.encode(), user.password.encode())
+        print("✅ Password match result:", match)
+    except Exception as e:
+        print("⚠️ Error during password check:", e)
+        raise HTTPException(status_code=500, detail="Server error")
+
+    if match:
+        return {
+            "success": True,
+            "message": "Login successful",
+            "user_id": user.userId,
+            "username": user.username
+        }
+
+    print("❌ Password mismatch.")
     raise HTTPException(status_code=401, detail="Invalid username or password")
 #endregion
 #region User Endpoints
