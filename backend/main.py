@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory="../frontend/templates")
-
+import os
 
 from sqlalchemy import create_engine, desc, Column, String
 from sqlalchemy.orm import Session
@@ -32,7 +32,10 @@ app.add_middleware(
 #endregion
 
 #region DB Connection
-engine = create_engine("sqlite:///Arkham_DB.db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "Arkham_DB.db")
+
+engine = create_engine(f"sqlite:///{DB_PATH}")
 Base.metadata.create_all(engine)
 
 def get_db():
@@ -67,7 +70,7 @@ def login_user(login: LoginRequest, db: Session = Depends(get_db)):
     username = login.username
     password = login.password
 
-    print("🔐 Incoming login:", username)
+    print("🔐 Incoming login:", username, password)
 
     user = db.query(Users).filter(Users.username == username).first()
     if not user:
