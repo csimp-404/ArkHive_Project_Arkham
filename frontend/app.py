@@ -97,6 +97,20 @@ def home():
     response_recent = requests.get(f"{FASTAPI_URL}/messages/recent/{user_id}")
     recent_messages = response_recent.json() if response_recent.status_code == 200 else []
 
+    for msg in recent_messages:
+        msg['content'] = decrypt_message(msg['content'], key)
+
+        # Figure out the other user
+        other_id = msg['userIdReceiver'] if msg['userIdSender'] == user_id else msg['userIdSender']
+        try:
+            other_user_response = requests.get(f"{FASTAPI_URL}/users/{other_id}")
+            other_user = other_user_response.json()
+            msg['other_username'] = other_user['username'] if other_user else f"ID {other_id}"
+            msg['other_userId'] = other_id
+        except:
+            msg['other_username'] = f"ID {other_id}"
+            msg['other_userId'] = other_id
+
     response_users = requests.get(f"{FASTAPI_URL}/users/")
     users = response_users.json() if response_users.status_code == 200 else []
 
