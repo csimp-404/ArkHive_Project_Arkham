@@ -1,8 +1,12 @@
+import os
+import sys
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'backend')))
+from utils import load_key, decrypt_message
 import requests
-import os
+
 
 #region App Setup
 app = Flask(__name__)
@@ -19,7 +23,19 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        recaptcha_response = request.form.get('g-recaptcha-response')
         print("Form submitted with:", username, password)
+        # Verify reCAPTCHA
+        recaptcha_verify = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': '6Lek7CkrAAAAAEz8IVaVJE0cCcmjM623Q9HAySqG',
+                'response': recaptcha_response
+            }
+        )
+        recaptcha_result = recaptcha_verify.json()
+        if not recaptcha_result.get('success'):
+            return render_template("login.html", error="reCAPTCHA verification failed.")
 
         
         try:
@@ -45,21 +61,39 @@ def home():
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    username = session.get('username','Guest')
-    user_id=session.get("user_id",1)
+    username = session.get('username', 'Guest')
+    user_id = session.get("user_id", 1)
 
+    # Get user profile info
     try:
         user_response = requests.get(f"{FASTAPI_URL}/users/username/{username}")
         user_data = user_response.json() if user_response.status_code == 200 else None
     except requests.exceptions.RequestException as e:
         return f"Error getting user info: {str(e)}"
 
-    # Safely set the profilePic
     profile_pic = user_data['profilePic'] if user_data and 'profilePic' in user_data else "default.png"
 
+    # Get and decrypt received messages
     response_received = requests.get(f"{FASTAPI_URL}/messages/received/{user_id}")
     received_messages = response_received.json() if response_received.status_code == 200 else []
 
+    key = load_key()
+    for msg in received_messages:
+        msg['content'] = decrypt_message(msg['content'], key)
+
+        # Fetch and attach sender's username
+        sender_id = msg['userIdSender']
+        try:
+            sender_response = requests.get(f"{FASTAPI_URL}/users/{sender_id}")
+            sender = sender_response.json()
+            msg['sender_username'] = sender['username'] if sender else f"ID {sender_id}"
+        except:
+            msg['sender_username'] = f"ID {sender_id}"
+
+    # Reverse inbox order
+    received_messages.reverse()
+
+    # Recent messages and user list
     response_recent = requests.get(f"{FASTAPI_URL}/messages/recent/{user_id}")
     recent_messages = response_recent.json() if response_recent.status_code == 200 else []
 
@@ -74,6 +108,7 @@ def home():
         recent_messages=recent_messages,
         users=users
     )
+
 
 
 # @app.route('/register')

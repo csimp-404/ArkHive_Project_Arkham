@@ -31,7 +31,7 @@
                     <li>
                         <a href="/conversation/{{ msg.userIdSender }}">
                             {{ msg.content }}
-                        </a> (from ID {{ msg.userIdSender }})
+                        </a> (from {{ msg.sender_username }})                        
                     </li>
                     {% endfor %}
                 </ul>
