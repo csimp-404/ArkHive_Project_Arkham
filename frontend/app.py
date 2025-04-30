@@ -42,6 +42,9 @@ def login():
 
 @app.route('/home')
 def home():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
     username = session.get('username','Guest')
     user_id=session.get("user_id",1)
 
@@ -82,6 +85,8 @@ def home():
 
 @app.route('/conversation/<int:other_user_id>')
 def conversation(other_user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     current_user_id = session.get('user_id', 1)  # fallback to 1 if not logged in
 
     try:
@@ -100,7 +105,10 @@ def conversation(other_user_id):
         current_user_id=current_user_id
     )
 
-
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 if __name__ == "__main__":
     app.run(debug=True)
