@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 templates = Jinja2Templates(directory="../frontend/templates")
 
 
-from sqlalchemy import create_engine, desc
+from sqlalchemy import create_engine, desc, Column, String
 from sqlalchemy.orm import Session
 
 from db_model import Base, Users, Messages
@@ -32,7 +32,7 @@ app.add_middleware(
 #endregion
 
 #region DB Connection
-engine = create_engine("sqlite:///./backend/Arkham_DB.db")
+engine = create_engine("sqlite:///Arkham_DB.db")
 Base.metadata.create_all(engine)
 
 def get_db():
