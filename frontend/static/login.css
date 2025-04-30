@@ -35,6 +35,24 @@ body {
     color: var(--lightGrey);
 }
 
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.login-container label,
+.login-container input {
+    width: 100%;
+    text-align: left;
+}
+
+.login-container label {
+    align-self: flex-start;
+    margin-left: -10px; /* optional: adds slight padding */
+    color: var(--gcpdBlue); /* optional: if you're using a color theme */
+}
+
 input[type="text"], input[type="password"] {
     width: 100%;
     padding: 8px;
@@ -46,7 +64,7 @@ input[type="text"], input[type="password"] {
 }
 
 button {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     border: none;
     background-color: var(--gcpdBlue);
